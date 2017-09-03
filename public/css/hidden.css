@@ -22,7 +22,7 @@
     max-width:600px;
     min-height: 150px;
     max-height: 600px;
-    background-color: #ceeaf5;
+
 }
 
 .dialog-content p {
@@ -36,8 +36,23 @@
     position: relative;
     vertical-align: middle;
     height: 40px;
-    background-color: #3498DB;
     color: #fff;
+}
+
+.dialog-content-client {
+    background-color: #ceeaf5;
+}
+
+.dialog-title-client {
+    background-color: #3498DB;
+}
+
+.dialog-content-man {
+    background-color: #c6fccc;
+}
+
+.dialog-title-man {
+    background-color: #33bf36;
 }
 
 .dialog-title span{
@@ -51,11 +66,18 @@
     top: 0;
     text-align: center;
     color: #fff;
-    background-color: #2574A9;
     height: 40px;
     width: 40px;
     border:0;
     text-decoration: none;
+}
+
+.close-dialog-client {
+    background-color: #2574A9;
+}
+
+.close-dialog-man {
+    background-color: #18a81a;
 }
 
 a.close-dialog:hover{
