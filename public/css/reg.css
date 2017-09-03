@@ -1,0 +1,27 @@
+body {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.error {
+    color: #ff2000;
+}
+
+.message {
+    color: #2f58ff;
+
+}
+
+nav {
+    font-size: 1.1em;
+}
+
+
+/* изменение цвета навбара при наведении */
+ul.nav.navbar-nav  li:hover {
+    background-color: #dddddd;
+    color: #99defd;
+}
+
+ul.nav.navbar-nav  li:hover a{
+    color: #567bff;
+}

@@ -1,0 +1,12 @@
+{% macro nested(array) %}
+	{% if array is iterable %}
+		<blockquote>
+			{% for element in array %}
+				{% from _self import nested %}
+				{{ nested(element) }}
+			{% endfor %}
+		</blockquote>
+	{% else %}
+		<p>{{ array }}</p>
+	{% endif %}
+{% endmacro %}

@@ -1,0 +1,35 @@
+{% if not cargo == false %}
+	<div class="cargo">
+		<div class="align-middle table-responsive" >
+			<table class="table table-bordered">
+				<caption class="text-center">{{ caption }}</caption>
+				<thead class="">
+				<tr>
+					<th>ID груза</th>
+					<th>Номер контейнера</th>
+					<th>Компания-клиент</th>
+					<th>Фамилия, Имя менеджера</th>
+					<th>Ожидаемая дата прибытия</th>
+					<th>Статус</th>
+				</tr>
+				</thead>
+				<tbody>
+					{% for item in cargo %}
+						<td>{{ item.getId() }}</td>
+						<td>{{ item.getContainer() }}</td>
+						<td onClick='getClientInfo( {{ item.getClientID() }} )'>{{ item.getClientName()}}</td>
+						<td onClick='getManagerInfo( {{ item.getManID() }} )'>{{ item.getManagerName() }}</td>
+						<td>{{ item.getDateArrival() }}</td>
+						<td>{{ item.getStatus() }}</td>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endif %}
+
+<ul class="pagination">
+	{% for query in queries %}
+		<li><a href="?{{ query }}" class="inline-block"> {{ loop.index }} </a></li>
+	{% endfor %}
+</ul>

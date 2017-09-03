@@ -1,0 +1,79 @@
+body {
+    background-color: #c1e1b4;
+    font-size: 1.5rem;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+nav {
+    font-size: 1rem;
+}
+
+p {
+    text-align: center;
+}
+
+.cargo {
+    border-radius: 7px;
+    background-color: white;
+    margin-top: 2rem;
+    padding: 5px 5px 5px 5px;
+    word-wrap: break-word;
+}
+
+.cargo p {
+    font-size: 1.0em;
+    color: #393b9d;
+}
+
+.cargo p:first-of-type {
+    margin-top: 10px;
+}
+
+a {
+    font-size: 1.5em;
+}
+
+
+caption {
+    font-size: 1.5em;
+    color: crimson;
+}
+
+select.form-control {
+    font-size: 1em;
+    padding: 3px 3px 3px 3px;
+}
+
+table.table-bordered{
+    border:1px solid blue;
+}
+table.table-bordered > thead > tr > th{
+    border:1px solid blue;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid blue;
+}
+
+/* цвет сообщений для пользователя */
+.message {
+    color: #2f58ff;
+    font-size: 1.3em;
+}
+
+.button_left {
+    margin-left: 10px;
+}
+
+.search_box {
+    color: #4446d0;
+}
+
+/* изменение цвета навбара при наведении */
+ul.nav.navbar-nav  li:hover {
+    background-color: #dddddd;
+    color: #99defd;
+}
+
+ul.nav.navbar-nav  li:hover a{
+    color: #567bff;
+}

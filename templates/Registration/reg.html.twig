@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<title>Регистрация</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/reg.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	{% include 'navbar.html.twig' %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-3 col-lg-offset-3 col-md-5 col-lg-5 align-middle">
+				<h1>Регистрация</h1>
+				{% include 'usermessage.html.twig' %}
+				{% include 'form.html.twig' %}
+			</div>
+		</div>
+	</div>
+	
+</body>
+

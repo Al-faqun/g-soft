@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conf>
+	<app>
+		<status>APP_IN_PRODUCTION</status>
+	</app>
+	<database>
+		<username>insert your username</username>
+		<password>here your passport</password>
+		<dbname>name of the database, containing `Students` and `Passwords` tables</dbname>
+	</database>
+
+</conf>

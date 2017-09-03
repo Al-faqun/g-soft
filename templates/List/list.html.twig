@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<title>Личный кабинет</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/list.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/hidden.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/js/onload.js"></script>
+</head>
+<body>
+
+{% include 'navbar.html.twig' %}
+<div class="container">
+	{% if authorized %}
+		{% if messages %}
+			<div class="row">
+				<div class="message align-middle">
+					{% for message in messages %}
+						<p><strong>{{ message|e }}</strong></p>
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+		{% include 'table.html.twig' %}
+	{% else %}
+		{% if messages %}
+			<div class="message">
+				{% for message in messages %}
+					<p><strong>{{ message|e }}</strong></p>
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endif %}
+	{% include 'hidden.html.twig' %}
+</div>
+</body>
