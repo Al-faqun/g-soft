@@ -72,7 +72,7 @@ EOT;
     
     /**
      * @param $clientID
-     * @param int $limit
+     * @param int|string $limit If "all", then limit and offset would be ignored.
      * @param int $offset
      * @return array|bool
      * @throws DbException
@@ -99,13 +99,17 @@ EOT;
                 LEFT JOIN `managers` ON `cargo`.`man_id` = `managers`.`id`
                 WHERE `clients`.`id` = :id
                 ORDER BY `$sortBy` $order
-                LIMIT :limit OFFSET :offset
 EOT;
-            
+            if ($limit !== 'all') {
+                $sql .= ' LIMIT :limit OFFSET :offset';
+            }
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam('id', $clientID, \PDO::PARAM_INT);
-            $stmt->bindParam('limit', $limit, \PDO::PARAM_INT);
-            $stmt->bindParam('offset', $offset, \PDO::PARAM_INT);
+            //if user indicate it wishes to get all rows at once
+            if ($limit !== 'all') {
+                $stmt->bindParam('limit', $limit, \PDO::PARAM_INT);
+                $stmt->bindParam('offset', $offset, \PDO::PARAM_INT);
+            }
             //if executed successfully
             if ( ($stmt->execute()) && ($stmt->rowCount() > 0) )  {
                 while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
@@ -164,13 +168,18 @@ EOT;
                 LEFT JOIN `managers` ON `cargo`.`man_id` = `managers`.`id`
                 WHERE `managers`.`id` = :id
                 ORDER BY `$sortBy` $order
-                LIMIT :limit OFFSET :offset
 EOT;
+            if ($limit !== 'all') {
+                $sql .= ' LIMIT :limit OFFSET :offset';
+            }
             
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam('id', $managerID, \PDO::PARAM_INT);
-            $stmt->bindParam('limit', $limit, \PDO::PARAM_INT);
-            $stmt->bindParam('offset', $offset, \PDO::PARAM_INT);
+            //if user indicate it wishes to get all rows at once
+            if ($limit !== 'all') {
+                $stmt->bindParam('limit', $limit, \PDO::PARAM_INT);
+                $stmt->bindParam('offset', $offset, \PDO::PARAM_INT);
+            }
             //if executed successfully
             if ( ($stmt->execute()) && ($stmt->rowCount() > 0) )  {
                 while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
