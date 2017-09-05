@@ -7,7 +7,7 @@
  */
 
 use gsoft\Controllers\InfoController;
-use gsoft\ErrorHelper;
+use gsoft\Exceptions\ErrorHelper;
 use gsoft\FileSystem;
 use gsoft\Loader;
 
@@ -44,7 +44,14 @@ try {
             $c->aboutManager($id);
         });
     });
-    
+    $controller->get('xls', function ($key, $value, InfoController $c) {
+        //if user is logged, prompt to save its cargo to .xls
+        $c->loggedCargoToExcel();
+    });
+    $controller->get('xlsToMail', function ($key, $value, InfoController $c) {
+        //if user is logged, prompt to save its cargo to .xls
+        $c->loggedCargoMail('test@localhost.com');
+    });
     $controller->start();
     
 } catch (\Throwable $e) {

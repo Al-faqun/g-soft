@@ -2,7 +2,7 @@
 
 //главная папка проекта
 use gsoft\Controllers\LoginController;
-use gsoft\ErrorHelper;
+use gsoft\Exceptions\ErrorHelper;
 use gsoft\FileSystem;
 use gsoft\Loader;
 

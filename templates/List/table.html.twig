@@ -33,3 +33,8 @@
 		<li><a href="?{{ query }}" class="inline-block"> {{ loop.index }} </a></li>
 	{% endfor %}
 </ul>
+
+<div class="pull-right xls-buttons">
+	<button type="button" class="btn btn-secondary" onclick="loadXls()"> Скачать как xls-файл</button>
+	<button type="button" class="btn btn-secondary" onclick="xlsToEmail()">Отослать xls-файл мне на почту</button>
+</div>

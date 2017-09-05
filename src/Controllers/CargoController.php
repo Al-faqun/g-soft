@@ -33,17 +33,21 @@ class CargoController extends PageController
     
     public function list()
     {
-        //mappers db->objects
+        //mappers that fetches objects from DB
         $cargoMapper    = new CargoMapper($this->pdo);
         $userMapper     = new UserMapper($this->pdo);
         $passwordMapper = new PasswordMapper($this->pdo);
         $view = new ListView( FileSystem::append([$this->root, 'templates']) );
-        
+        //manager of logins and registration
         $loginMan  = new LoginManager($userMapper, $passwordMapper, $this->pdo);
         //проверяем логин пользователя (если есть)
         $authorized = $loginMan->isLogged();
         //если залогинены - запоминаем имя для отображения на странице
         if ($authorized === true) {
+            if ($loginMan->isClient()) {
+                //save info for template
+                $isClient = $loginMan->isClient();
+            }
             $usernameDisplayed = $loginMan->getLoggedName();
         } else {
             $usernameDisplayed = '';
@@ -96,10 +100,9 @@ class CargoController extends PageController
             
         } else {
             //NON-authed user must see only message
-            $message = <<<'EOT'
-            Судя по всему, вы не залогинены на нашем сайте.
-            Только зарегистрированные пользователи с правами могут зайти на эту страницу!
-EOT;
+            $message = 'Судя по всему, вы не залогинены на нашем сайте. '
+            . 'Только зарегистрированные пользователи с правами могут зайти на эту страницу!';
+
             $this->addMessage($message);
             $view->render([
                 'authorized' => false,

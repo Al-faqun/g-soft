@@ -1,6 +1,6 @@
 <?php
 use gsoft\Controllers\CargoController;
-use gsoft\ErrorHelper;
+use gsoft\Exceptions\ErrorHelper;
 use gsoft\FileSystem;
 use gsoft\Input\SearchQueryValidator;
 use gsoft\Loader;

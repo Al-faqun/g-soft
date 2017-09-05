@@ -1,7 +1,9 @@
 {
   "require": {
     "twig/twig": "2.x-dev",
-    "phpunit/phpunit": "6.4.x-dev"
+    "phpunit/phpunit": "6.4.x-dev",
+    "phpoffice/phpexcel": "1.8.1",
+    "phpmailer/phpmailer": "6.0.x-dev"
   },
 
   "autoload": {

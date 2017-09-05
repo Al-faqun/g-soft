@@ -1,0 +1,12 @@
+.idea/
+vendor/
+*.log
+public/test.php
+public/upload.php
+public/dayside
+**/cache/
+bootstrap.php
+composer.lock
+public/uploads/*.*
+public/uploads
+ini/config.xml

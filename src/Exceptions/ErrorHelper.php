@@ -1,7 +1,9 @@
 <?php
 
-namespace gsoft;
+namespace gsoft\Exceptions;
 
+
+use gsoft\FileSystem;
 
 class ErrorHelper {
     /**
@@ -41,19 +43,39 @@ class ErrorHelper {
     {
         switch ($appStatus) {
             case self::APP_IN_DEVELOPMENT:
-                $this->renderThrowableAndExit($e, '/');
+                //if answer needs to be in json
+                if ($e instanceof JsonException) {
+                    $this->renderJSONandExit($e->getMessage());
+                } else {
+                    $this->renderThrowableAndExit($e, '/');
+                }
                 break;
             case self::APP_IN_PRODUCTION:
                 $userMes = 'Encountered error, logs are sent to developer. Please, try again later!';
-                //форматируем текст для записи в лог-файл
-                $text = self::excepTextRecursive($e);
-                //добавляем дату в начало
-                array_unshift($text, date('d-M-Y H:i:s') . ' ');
-                $text[] = 'UserID = ' . $userID;
-                $this->addToLog($text, $this->logFile);
-                $this->renderErrorPageAndExit($userMes, '/');
+                //if answer needs to be in json
+                if ($e instanceof JsonException) {
+                    $this->renderJSONandExit($userMes);
+                } else {
+                    //форматируем текст для записи в лог-файл
+                    $text = self::excepTextRecursive($e);
+                    //добавляем дату в начало
+                    array_unshift($text, date('d-M-Y H:i:s') . ' ');
+                    $text[] = 'UserID = ' . $userID;
+                    $this->addToLog($text, $this->logFile);
+                    $this->renderErrorPageAndExit($userMes, '/');
+                }
                 break;
         }
+    }
+    
+    /**
+     * Echoes json response.
+     * @param \Throwable $e
+     * @return string
+     */
+    private function renderJSONandExit($errorMessage)
+    {
+        echo json_encode(['error' => $errorMessage]);
     }
     
     /**
@@ -65,7 +87,7 @@ class ErrorHelper {
      * @param string $whereToRedirect Relative URLpath to desired location,
      * to which user would be relocated after viewing info about exceptions.
      */
-    function renderThrowableAndExit(\Throwable $e, $whereToRedirect)
+    private function renderThrowableAndExit(\Throwable $e, $whereToRedirect)
     {
         //get text of exception and it's previous exceptions
         $output = self::excepTextRecursive($e);
@@ -80,7 +102,7 @@ class ErrorHelper {
      * @param string $whereToRedirect Relative $whereToRedirect URLpath to desired location,
      * to which user would be relocated after viewing info about exceptions.
      */
-    function renderErrorPageAndExit($errorMes, $whereToRedirect)
+    private function renderErrorPageAndExit($errorMes, $whereToRedirect)
     {
         header('Content-type: text/html; charset=utf-8');
         $error = $errorMes;
@@ -102,7 +124,7 @@ class ErrorHelper {
      * @param string $whereToRedirect Relative $whereToRedirect URLpath to desired location,
      * to which user would be relocated after viewing info about exceptions.
      */
-    function renderFatalErrorAndExit($error, $whereToRedirect)
+    private function renderFatalErrorAndExit($error, $whereToRedirect)
     {
         $text = array("Произошла фатальная ошибка, выполнение приложения прекращается: ");
         $text = array_merge($text, self::errorToArray($error));

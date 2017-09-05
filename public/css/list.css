@@ -60,13 +60,6 @@ table.table-bordered > tbody > tr > td{
     font-size: 1.3em;
 }
 
-.button_left {
-    margin-left: 10px;
-}
-
-.search_box {
-    color: #4446d0;
-}
 
 /* изменение цвета навбара при наведении */
 ul.nav.navbar-nav  li:hover {
@@ -77,3 +70,21 @@ ul.nav.navbar-nav  li:hover {
 ul.nav.navbar-nav  li:hover a{
     color: #567bff;
 }
+
+/* модификация стиля бутстрапа для кнопки*/
+.xls-buttons {
+    margin-top: 20px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+
+.xls-buttons .btn-secondary {
+    background-color: white;
+    font-size: inherit;
+}
+
+.xls-buttons .btn-secondary:hover{
+    background-color: #EEEEEE;
+}
+
