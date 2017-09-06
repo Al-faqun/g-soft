@@ -14,7 +14,7 @@ class ErrorHelper {
     private $twig;
     private $fallBackStatus;
     const APP_IN_DEVELOPMENT = 0;
-    const APP_IN_PRODUCTION = 0;
+    const APP_IN_PRODUCTION = 1;
     
     /**
      * ErrorHelper constructor.
@@ -39,29 +39,38 @@ class ErrorHelper {
         $this->logFile = $logFilePath;
     }
     
-    function dispatch(\Throwable $e, $appStatus = self::APP_IN_PRODUCTION, $userID = 0)
+    function dispatch(\Throwable $e, $appStatus = self::APP_IN_PRODUCTION, $json = false, $userID = 0)
     {
         switch ($appStatus) {
             case self::APP_IN_DEVELOPMENT:
-                //if answer needs to be in json
+                //if exception needs to be sent in json
                 if ($e instanceof JsonException) {
                     $this->renderJSONandExit($e->getMessage());
+                //if every exc and error need to be sent in json
+                } elseif ($json === true) {
+                    $this->renderJSONandExit(self::excepTextRecursiveIntoString($e));
+                //else, error page must be sent
                 } else {
                     $this->renderThrowableAndExit($e, '/');
                 }
                 break;
             case self::APP_IN_PRODUCTION:
                 $userMes = 'Encountered error, logs are sent to developer. Please, try again later!';
+                //форматируем текст для записи в лог-файл
+                $text = self::excepTextRecursive($e);
+                //добавляем дату в начало
+                array_unshift($text, date('d-M-Y H:i:s') . ' ');
+                $text[] = 'UserID = ' . $userID;
+                $this->addToLog($text, $this->logFile);
+                
                 //if answer needs to be in json
                 if ($e instanceof JsonException) {
                     $this->renderJSONandExit($userMes);
+                    //if every exc and error need to be sent in json
+                } elseif ($json === true) {
+                    $this->renderJSONandExit($userMes);
+                    //else, error page must be sent
                 } else {
-                    //форматируем текст для записи в лог-файл
-                    $text = self::excepTextRecursive($e);
-                    //добавляем дату в начало
-                    array_unshift($text, date('d-M-Y H:i:s') . ' ');
-                    $text[] = 'UserID = ' . $userID;
-                    $this->addToLog($text, $this->logFile);
                     $this->renderErrorPageAndExit($userMes, '/');
                 }
                 break;
@@ -138,7 +147,7 @@ class ErrorHelper {
      */
     function addToLog($message, $logpath)
     {
-        if (is_writeable($logpath)) {
+        if (is_writeable(dirname($logpath))) {
             $text = self::arrayToString($message, PHP_EOL, PHP_EOL);
             error_log($text, 3, $logpath);
         } else throw new \Exception('Log file location is not writeable');
@@ -237,6 +246,36 @@ class ErrorHelper {
         }
         while ($e = $previous);
         return $output;
+    }
+    
+    /**
+     * Parses Throwable (and all of it's previous if exist) into single string.
+     * @param \Throwable $e
+     * @return string
+     */
+    public static function excepTextRecursiveIntoString(\Throwable $e)
+    {
+        //recursively get info about exception and it's possible parents
+        $i = 1;
+        $previous = $e->getPrevious();
+        if ($previous !== null)
+        {
+            $i++;
+            $previous = $previous->getPrevious();
+        }
+    
+        $output = array();
+        do {
+            $output[] = "Возникло исключение #{$i} класса " . get_class($e) . ':';
+            $output[] = 'текст: ' . "'" . $e->getMessage() . "'" . ',';
+            $output[] = 'файл: ' . $e->getFile() . ',';
+            $output[] = 'строка:' . $e->getLine() . '.';
+            $i--;
+            $previous = $e->getPrevious();
+        }
+        while ($e = $previous);
+
+        return implode('; ', $output);
     }
     
     /**
