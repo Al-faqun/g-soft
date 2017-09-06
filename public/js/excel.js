@@ -1,4 +1,4 @@
-$
+
 function loadXls() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
