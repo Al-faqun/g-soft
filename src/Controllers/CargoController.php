@@ -26,11 +26,17 @@ class CargoController extends PageController
         $this->pdo = $pdo;
     }
     
+    /**
+     * Process prepended actions with input variables (get, post, cookie)
+     */
     public function start()
     {
         $this->execute();
     }
     
+    /**
+     * Display page with list of cargo
+     */
     public function list()
     {
         //mappers that fetches objects from DB
@@ -38,6 +44,7 @@ class CargoController extends PageController
         $userMapper     = new UserMapper($this->pdo);
         $passwordMapper = new PasswordMapper($this->pdo);
         $view = new ListView( FileSystem::append([$this->root, 'templates']) );
+        
         //manager of logins and registration
         $loginMan  = new LoginManager($userMapper, $passwordMapper, $this->pdo);
         //проверяем логин пользователя (если есть)
@@ -46,11 +53,14 @@ class CargoController extends PageController
         if ($authorized === true) {
             if ($loginMan->isClient()) {
                 //save info for template
-                $isClient = $loginMan->isClient();
+                $usergroup = 'client';
+            } elseif ($loginMan->isManager()) {
+                $usergroup = 'manager';
             }
             $usernameDisplayed = $loginMan->getLoggedName();
         } else {
             $usernameDisplayed = '';
+            $usergroup = '';
         }
         
         //values for db search query, from previously executed requests
@@ -75,6 +85,7 @@ class CargoController extends PageController
             $view->render([
                 'authorized' => $authorized,
                 'username'   => $usernameDisplayed,
+                'usergroup' => $usergroup,
                 'cargo' => $cargo,
                 'queries' => $queries,
                 'messages' => $this->getMessages()
@@ -93,6 +104,7 @@ class CargoController extends PageController
             $view->render([
                 'authorized' => $authorized,
                 'username'   => $usernameDisplayed,
+                'usergroup' => $usergroup,
                 'cargo' => $cargo,
                 'queries' => $queries,
                 'messages' => $this->getMessages()
@@ -107,6 +119,7 @@ class CargoController extends PageController
             $view->render([
                 'authorized' => false,
                 'username'   => $usernameDisplayed,
+                'usergroup'  => '',
                 'messages' => $this->getMessages()
             ]);
         }
@@ -117,6 +130,9 @@ class CargoController extends PageController
     
     }
     
+    /**
+     *
+     */
     public function edit()
     {
     
