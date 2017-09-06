@@ -9,8 +9,10 @@
 	<link rel="stylesheet" type="text/css" href="/css/hidden.css"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="/js/onload.js"></script>
+	<script src="/js/info.js"></script>
 	<script src="/js/excel.js"></script>
+	<script src="/js/newcargo.js"></script>
+	<script src="/js/edit.js"></script>
 </head>
 <body>
 
@@ -26,7 +28,10 @@
 				</div>
 			</div>
 		{% endif %}
+		<!-- table with content -->
 		{% include 'table.html.twig' %}
+		<!-- hidden forms for js -->
+		{% include 'hidden.html.twig' %}
 	{% else %}
 		{% if messages %}
 			<div class="message">
@@ -36,6 +41,5 @@
 			</div>
 		{% endif %}
 	{% endif %}
-	{% include 'hidden.html.twig' %}
 </div>
 </body>

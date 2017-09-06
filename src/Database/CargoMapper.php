@@ -30,7 +30,7 @@ class CargoMapper
     {
         try {
             $sql = <<<'EOT'
-                SELECT
+                SELECT SQL_CALC_FOUND_ROWS
                 `cargo`.`id` as 'id',
                 `container`,
                 `client_id`,
@@ -79,13 +79,13 @@ EOT;
      */
     function getForClient($clientID, $limit = 5, $offset = 0)
     {
-        $sortBy = 'container';
+        $sortBy = '`cargo`.`id`';
         $order  = 'ASC';
         try {
             $cargo = array();
     
             $sql = <<<EOT
-                SELECT
+                SELECT SQL_CALC_FOUND_ROWS
                 `cargo`.`id` as 'id',
                 `container`,
                 `client_id`,
@@ -98,7 +98,7 @@ EOT;
                 LEFT JOIN `clients` ON `cargo`.`client_id` = `clients`.`id`
                 LEFT JOIN `managers` ON `cargo`.`man_id` = `managers`.`id`
                 WHERE `clients`.`id` = :id
-                ORDER BY `$sortBy` $order
+                ORDER BY $sortBy $order
 EOT;
             if ($limit !== 'all') {
                 $sql .= ' LIMIT :limit OFFSET :offset';
@@ -154,7 +154,7 @@ EOT;
             $cargo = array();
             
             $sql = <<<EOT
-                SELECT
+                SELECT SQL_CALC_FOUND_ROWS
                 `cargo`.`id` as 'id',
                 `container`,
                 `client_id`,
@@ -306,7 +306,7 @@ EOT;
                 //instead return false
                 $result = false;
             } else {
-                throw new DbException('Ошибка при изменении менеджера груза.', 0, $e);
+                throw new DbException('Ошибка при изменении даты прибытия груза.', 0, $e);
             }
         }
         return $result;
@@ -318,13 +318,44 @@ EOT;
      * @return bool
      * @throws DbException
      */
-    function changeDateArrival($cargoID, $dateArrival)
+    function changeDateArrival($cargoID, \DateTime $dateArrival)
     {
         try {
             $sql = 'UPDATE `cargo` SET `date_arrival` = :date_arrival WHERE `id` = :id';
             $stmt = $this->pdo->prepare($sql);
+            $date = $dateArrival->format('Y-m-d');
             $stmt->bindParam(':id', $cargoID, \PDO::PARAM_INT);
-            $stmt->bindParam(':date_arrival', $dateArrival);
+            $stmt->bindParam(':date_arrival', $date);
+            $result = $stmt->execute();
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                //'Integrity constraint violation: foreign key...'
+                // - must not throw, because is predictable
+                //instead return false
+                $result = false;
+            } else {
+                throw new DbException('Ошибка при изменении даты прибытия груза груза.', 0, $e);
+            }
+        }
+        return $result;
+    }
+    
+    /**
+     * @param $cargoID
+     * @param $status
+     * @param \DateTime $dateArrival
+     * @return bool
+     * @throws DbException
+     */
+    function changeStatusAndDateArrival($cargoID, $status, \DateTime $dateArrival)
+    {
+        try {
+            $sql = 'UPDATE `cargo` SET `date_arrival` = :date_arrival, `status` = :status WHERE `id` = :id';
+            $stmt = $this->pdo->prepare($sql);
+            $date = $dateArrival->format('Y-m-d');
+            $stmt->bindParam(':id', $cargoID, \PDO::PARAM_INT);
+            $stmt->bindParam(':date_arrival', $date);
+            $stmt->bindParam(':status', $status);
             $result = $stmt->execute();
         } catch (\PDOException $e) {
             if ($e->getCode() === '23000') {

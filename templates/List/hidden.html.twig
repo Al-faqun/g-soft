@@ -1,3 +1,4 @@
+<!-- диалог о клиенте -->
 <div class="back-dialog" id="client_dialog">
 	<!-- Блок с нашим контентом -->
 	<div class="dialog-content dialog-content-client">
@@ -13,6 +14,7 @@
 	</div>
 </div>
 
+<!-- диалог о менеджере -->
 <div class="back-dialog" id="manager_dialog">
 	<!-- Блок с нашим контентом -->
 	<div class="dialog-content dialog-content-man">
@@ -26,3 +28,55 @@
 		<p id="man_tel">Телефон менеджера: </p>
 	</div>
 </div>
+
+<!-- диалог о новом грузе для клиента -->
+{% if usergroup == 'client' %}
+	<div class="back-dialog" id="cargo_dialog">
+		<!-- our content -->
+		<div class="dialog-content dialog-content-client">
+			<!-- title -->
+			<div class="dialog-title dialog-title-client">
+				<span id="title">Новый груз</span>
+				<a class='close-dialog close-dialog-client' href='javascript: closeCargoDialog()'></a>
+			</div>
+			<!-- form for input of new cargo data -->
+			<form>
+				<div class="form-group">
+					<label for="container_name" title="">Номер контейнера:</label>
+					<input type="text" class="form-control" name="container_name" id="container_name"
+					       title="Номер контейнера с грузом">
+				</div>
+				<button type="button" class="btn btn-default" onclick="registerCargo()">Зарегистрировать груз</button>
+			</form>
+		</div>
+	</div>
+{% endif %}
+
+<!-- диалог о редактировании груза менеджером -->
+{% if usergroup == 'manager' %}
+	<div class="back-dialog" id="edit_cargo_dialog">
+		<!-- our content -->
+		<div class="dialog-content dialog-content-man">
+			<!-- title -->
+			<div class="dialog-title dialog-title-man">
+				<span id="title">Изменить данные груза</span>
+				<a class='close-dialog close-dialog-man' href='javascript: closeEditDialog()'></a>
+			</div>
+			<!-- form for input of new cargo data -->
+			<form id="edit_form">
+				<div class="form-group">
+					<label for="date_arrival">Дата прибытия:</label>
+					<input type="date" class="form-control" name="date_arrival" id="date_arrival"
+					       title="Дата прибытия контейнера с грузом">
+					<label for="cargo_status" >Статус груза:</label>
+					<select class="selectpicker" id="cargo_status" name="cargo_status">
+						<option value="on_board">On board</option>
+						<option value="finished">Finished</option>
+					</select>
+					<input type="hidden" name="cargo_id" id="cargo_id">
+				</div>
+				<button type="submit" class="btn btn-default">Зарегистрировать груз</button>
+			</form>
+		</div>
+	</div>
+{% endif %}

@@ -20,8 +20,7 @@ try {
     $controller->get('registered', function ($key, $value, RegController $c) {
         $c->addMessage('Вы успешно зарегистрированы! Теперь можете войти.');
     });
-    $controller->start();
-    
+
     //запуск нужной страницы
     $controller->start();
     

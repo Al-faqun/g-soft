@@ -1,3 +1,6 @@
+
+
+
 /**
  * Fetch info from server AND post it into page.
  * @param id
@@ -8,9 +11,10 @@ function getClientInfo(id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             //ответ сервера
-            var json = $.parseJSON(this.responseText);
+            var json = JSON.parse(this.responseText);
             if (json === false) {
                 var errorText = 'Извините, не получилось получить данные об этом пользователе.';
+                alert(errorText);
             } else {
                 //заполнить поля о клиенте
                 var title = document.getElementById('title');
@@ -58,7 +62,7 @@ function getManagerInfo(id) {
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             //ответ сервера
-            var json = $.parseJSON(this.responseText);
+            var json = JSON.parse(this.responseText);
             if (json === false) {
                 var errorText = 'Извините, не получилось получить данные об этом пользователе.';
             } else {

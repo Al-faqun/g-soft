@@ -141,7 +141,7 @@ class Cargo
     public function setDateArrival($dateArrival)
     {
         if ( !($dateArrival instanceof \DateTime) ) {
-            $this->dateArrival = new \DateTime($dateArrival);
+            $this->dateArrival = new \DateTime($dateArrival, new \DateTimeZone('Europe/Moscow'));
         } else {
             $this->dateArrival = $dateArrival;
         }

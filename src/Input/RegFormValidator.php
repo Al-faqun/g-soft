@@ -1,9 +1,6 @@
 <?php
 namespace gsoft\Input;
 
-
-
-
 use gsoft\Database\ClientMapper;
 use gsoft\Database\UserMapper;
 
@@ -205,6 +202,9 @@ class RegFormValidator
         if (array_key_exists($fieldname, $input)
         ) {
             $result = self::checkString($input[$fieldname], 3, 20, true);
+            if ( !(preg_match('/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/i', $result) > 0) ) {
+                $result = false;
+            }
         } else $result = false;
         
         return $result;

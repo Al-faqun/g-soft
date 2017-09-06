@@ -88,3 +88,10 @@ ul.nav.navbar-nav  li:hover a{
     background-color: #EEEEEE;
 }
 
+/* кнопка редактирования для менеджера */
+.btn-manager {
+    color: green;
+}
+.btn-manager:hover {
+    background-color: lightblue;
+}

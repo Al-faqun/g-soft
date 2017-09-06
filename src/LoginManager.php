@@ -55,7 +55,7 @@ class LoginManager
         $client = $clientMapper->addClient($this->userMapper, $client);
         //Password table
         if ($client !== false) {
-            $success = $this->passwordMapper->addHash($client->getId(), $hash); var_dump($success);
+            $success = $this->passwordMapper->addHash($client->getId(), $hash);
             
         } else $success = false;
         //if all done successfully

@@ -153,7 +153,7 @@ class CargoMapperTest extends TestCase
         try {
             $cargo = $this->mapper->newCargo('you must not see that', 1);
             $datetime = new \DateTime('now');
-            $result = $this->mapper->changeDateArrival($cargo->getId(), $datetime->format('Y-m-d H:i:s'));
+            $result = $this->mapper->changeDateArrival($cargo->getId(), $datetime);
             $this->assertNotFalse($result);
             
         } catch (DbException $e) {
@@ -163,7 +163,7 @@ class CargoMapperTest extends TestCase
     
     public function testChangeDateArrivalFail()
     {
-        $this->expectException(DbException::class);
+        $this->expectException(\TypeError::class);
         $cargo = $this->mapper->newCargo('you must not see that', 1);
         $result = $this->mapper->changeDateArrival($cargo->getId(), '');
         $this->assertFalse($result);

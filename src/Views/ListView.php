@@ -34,6 +34,7 @@ class ListView extends CommonView
         ob_start();
         $authorized = $params['authorized'];
         $usernameDisplayed = $params['username'];
+        $usergroup = $params['usergroup'];
         $messages = $params['messages'];
         $cargo   = $params['cargo'] ?? null;
         $queries = $params['queries'] ?? null;
@@ -53,6 +54,7 @@ class ListView extends CommonView
             'queries'  => $queries,
             'authorized' => $authorized,
             'username'   => $usernameDisplayed,
+            'usergroup'  => $usergroup,
             'caption' => $caption
         ));
         return ob_get_clean();

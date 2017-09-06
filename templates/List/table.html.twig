@@ -11,30 +11,53 @@
 					<th>Фамилия, Имя менеджера</th>
 					<th>Ожидаемая дата прибытия</th>
 					<th>Статус</th>
+					{% if usergroup == 'manager' %}
+						<th>Изменить данные</th>
+					{% endif %}
 				</tr>
 				</thead>
 				<tbody>
 					{% for item in cargo %}
-						<td>{{ item.getId() }}</td>
-						<td>{{ item.getContainer() }}</td>
-						<td onClick='getClientInfo( {{ item.getClientID() }} )'>{{ item.getClientName()}}</td>
-						<td onClick='getManagerInfo( {{ item.getManID() }} )'>{{ item.getManagerName() }}</td>
-						<td>{{ item.getDateArrival() }}</td>
-						<td>{{ item.getStatus() }}</td>
+						<tr id="cargo_{{ item.getId() }}">
+							<td id="cargo_{{ item.getId() }}_id">{{ item.getId() }}</td>
+							<td id="cargo_{{ item.getId() }}_container">{{ item.getContainer() }}</td>
+							<td id="cargo_{{ item.getId() }}_clientname" onClick='getClientInfo( {{ item.getClientID() }} )'>
+								{{ item.getClientName() ?? 'Не указан'}}
+							</td>
+							<td id="cargo_{{ item.getId() }}_manname" onClick='getManagerInfo( {{ item.getManID() }} )'>
+								{{ item.getManagerName() ?? 'Не указан'}}
+							</td>
+							<td id="cargo_{{ item.getId() }}_datearrival">{{ item.getDateArrival() }}</td>
+							<td id="cargo_{{ item.getId() }}_status">{{ item.getStatus() }}</td>
+							{% if (usergroup == 'manager') %}
+								<td>
+									<button type="button" class="btn btn-secondary btn-manager pull-right"
+									        onclick="openEditDialog({{ item.getId() }})">
+										Редактировать
+									</button>
+								</td>
+							{% endif %}
+						</tr>
 					{% endfor %}
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<ul class="pagination">
+		{% for query in queries %}
+			<li><a href="?{{ query }}" class="inline-block"> {{ loop.index }} </a></li>
+		{% endfor %}
+	</ul>
 {% endif %}
 
-<ul class="pagination">
-	{% for query in queries %}
-		<li><a href="?{{ query }}" class="inline-block"> {{ loop.index }} </a></li>
-	{% endfor %}
-</ul>
-
 <div class="pull-right xls-buttons">
-	<button type="button" class="btn btn-secondary" onclick="loadXls()"> Скачать как xls-файл</button>
-	<button type="button" class="btn btn-secondary" onclick="xlsToEmail()">Отослать xls-файл мне на почту</button>
+	
+		<button type="button" class="btn btn-secondary" onclick="loadXls()"> Скачать как xls-файл</button>
+		<button type="button" class="btn btn-secondary" onclick="xlsToEmail()">Отослать xls-файл мне на почту</button>
+	
+	{% if usergroup == 'client' %}
+		<button type="button" class="btn btn-secondary" onclick="openCargoDialog()">Добавить новый груз</button>
+	{% endif %}
 </div>
+

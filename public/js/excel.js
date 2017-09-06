@@ -1,9 +1,10 @@
+$
 function loadXls() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             //ответ сервера
-            var response = $.parseJSON(this.responseText);
+            var response = JSON.parse(this.responseText);
             if (
                 (response === false)
                 || (typeof response.fileContents === "undefined")
@@ -28,9 +29,13 @@ function xlsToEmail() {
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             //ответ сервера
-            var response = $.parseJSON(this.responseText);
-            if (response === false) {
+            var response = JSON.parse(this.responseText);
+            if (
+                (response === false)) {
                 var errorText = 'Не удалось отправить документ на вашу почту.';
+                alert(errorText);
+            } else if(response.hasOwnProperty('error')) {
+                errorText = response.error;
                 alert(errorText);
             } else {
                 var successText = 'Документ отослан по адресу: ' + response;
