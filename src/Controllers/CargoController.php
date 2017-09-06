@@ -125,18 +125,4 @@ class CargoController extends PageController
         }
     }
     
-    public function add()
-    {
-    
-    }
-    
-    /**
-     *
-     */
-    public function edit()
-    {
-    
-    }
-    
-    
 }
