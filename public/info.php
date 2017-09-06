@@ -50,7 +50,7 @@ try {
     });
     $controller->get('xlsToMail', function ($key, $value, InfoController $c) {
         //if user is logged, prompt to save its cargo to .xls
-        $c->loggedCargoMail('test@localhost.com');
+        $c->loggedCargoMail();
     });
     $controller->start();
     

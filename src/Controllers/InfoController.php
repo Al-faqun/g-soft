@@ -334,7 +334,7 @@ class InfoController extends PageController
     {
         $email = new PHPMailer();
         $email->CharSet = 'UTF-8';
-        $email->From      = 'webmaster@gsoft.local';
+        $email->From      = 'webmaster@shinoamail.ru';
         $email->FromName  = 'Shinoa the Webmaster';
         $email->Subject   = $title;
         $email->Body      = 'Запрошенная вами таблица грузов в прикреплённом xls файле.';
