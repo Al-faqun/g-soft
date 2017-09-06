@@ -78,4 +78,21 @@ class LoginMapperTest extends TestCase
         $result = $this->mapper->addLogin('test hash', 0);
         $this->assertFalse($result);
     }
+    
+    public function testChangeHash()
+    {
+        try {
+            $id = $this->mapper->addLogin('test hash', 2);
+            if ($id) {
+                $result = $this->mapper->changeHash('updated hash', $id);
+            } else {
+                $result = false;
+            }
+            $this->assertTrue($result);
+        } catch (DbException $e) {
+            echo $e->getPrevious()->getMessage();
+        }
+    }
+    
+ 
 }

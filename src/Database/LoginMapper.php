@@ -53,12 +53,13 @@ class LoginMapper
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(':id', $loginID, \PDO::PARAM_INT);
             $result = $stmt->execute();
-            if ($result !== false) {
+            if ( ($result !== false) AND ($stmt->rowCount() > 0)) {
                 $assoc = $stmt->fetch(\PDO::FETCH_ASSOC);
-                if (is_array($assoc)) {
+                if (is_array($assoc) AND !empty($assoc)) {
                     $result = $assoc['userid'];
                 } else $result = false;
-            }
+            } else $result = false;
+            
         } catch (\PDOException $e) {
             throw new DbException('Ошибка при получении ID пользователя.', 0, $e);
         }
@@ -90,6 +91,19 @@ class LoginMapper
         return $result;
     }
     
+    function changeHash($newtoken, $userid)
+    {
+        try {
+            $sql = 'UPDATE  `logins` SET `token` = :token WHERE `userid` = :userid';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':token', $newtoken);
+            $stmt->bindParam(':userid', $userid, \PDO::PARAM_INT);
+            $result = $stmt->execute();
+        } catch (\PDOException $e) {
+            throw new DbException('Ошибка при добавлении записи о логине.', 0, $e);
+        }
+        return $result;
+    }
     /**
      * Имеет смысл использовать только следующим же выражением после insert.
      *
