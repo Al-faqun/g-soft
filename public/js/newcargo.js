@@ -22,7 +22,7 @@ function registerCargo() {
         }
     };
     var params = 'container=' + encodeURIComponent(container);
-    xhttp.open("POST", "newcargo.php");
+    xhttp.open("POST", "new_cargo.php");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send(params);
 }
@@ -48,7 +48,7 @@ function closeCargoDialog(){
 function makeExecutor(cargoID) {
     $.ajax({
         type: 'post',
-        url: 'awaitingList.php',
+        url: 'awaiting_list.php',
         data: {'makeExecutor' : true, 'cargoID' : cargoID},
         success: function (response, status, xhr) {
             response = JSON.parse(response);

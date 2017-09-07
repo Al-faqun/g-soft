@@ -33,6 +33,7 @@ class RegView  extends CommonView
         //параметры для навбара-логина
         $authorized = $params['authorized'];
         $usernameDisplayed = $params['username'];
+        $usergroup = $params['usergroup'];
         
         //загружаем шаблон, который использует вышеописанные переменные
         $template = $this->twig->load('reg.html.twig');
@@ -41,7 +42,8 @@ class RegView  extends CommonView
             'messages' => $messages,
             'databack' => $dataBack,
             'authorized' => $authorized,
-            'username'   => $usernameDisplayed
+            'username'   => $usernameDisplayed,
+            'usergroup'  => $usergroup
         ));
         return ob_get_clean();
     }

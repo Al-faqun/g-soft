@@ -174,7 +174,6 @@ EOT;
             if ($limit !== 'all') {
                 $sql .= ' LIMIT :limit OFFSET :offset';
             }
-            
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam('id', $managerID, \PDO::PARAM_INT);
             //if user indicate it wishes to get all rows at once
@@ -184,6 +183,8 @@ EOT;
             }
             //if executed successfully
             if ( ($stmt->execute()) && ($stmt->rowCount() > 0) )  {
+                //save total number of found rows for later use
+                $this->lastCount = $this->foundRows();
                 while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                     //convert array of data to object
                     $fetchedCargo = $this->convertToObject($row);
@@ -196,8 +197,6 @@ EOT;
             } else {
                 $cargo = false;
             }
-            //save total number of found rows for later use
-            $this->lastCount = $this->foundRows();
         } catch (\PDOException $e) {
             if ($e->getCode() === '23000') {
                 //'Integrity constraint violation: foreign key...'
@@ -272,6 +271,7 @@ EOT;
         }
         return $cargo;
     }
+    
     /**
      * @param $container
      * @param $clientID

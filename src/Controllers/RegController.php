@@ -44,9 +44,16 @@ class RegController extends PageController
         $authorized = $loginMan->isLogged();
         //если залогинены - запоминаем имя для отображения на странице
         if ($authorized === true) {
+            if ($loginMan->isClient()) {
+                //save info for template
+                $usergroup = 'client';
+            } elseif ($loginMan->isManager()) {
+                $usergroup = 'manager';
+            }
             $usernameDisplayed = $loginMan->getLoggedName();
         } else {
             $usernameDisplayed = '';
+            $usergroup = '';
         }
         
         $dataBack  = array();  // значения неправильных входных данных
@@ -68,7 +75,8 @@ class RegController extends PageController
             'messages'   => $this->messages,
             'databack'   => $dataBack,
             'authorized' => $authorized,
-            'username'   => $usernameDisplayed
+            'username'   => $usernameDisplayed,
+            'usergroup'  => $usergroup
         ]);
     }
 }

@@ -9,6 +9,10 @@ use gsoft\LoginManager;
 use gsoft\Pager;
 use gsoft\Views\ListView;
 
+/**
+ * Controller abou cargo: list them, change them.
+ * @package gsoft\Controllers
+ */
 class CargoController extends PageController
 {
     private $root;

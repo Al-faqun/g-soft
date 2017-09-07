@@ -4,7 +4,7 @@ $(document).ready(function() {
             event.preventDefault();
             $.ajax({
                 type: 'post',
-                url: 'editCargo.php',
+                url: 'edit_cargo.php',
                 data: $('#edit_form').serialize(),
                 success: function (response, status, xhr) {
                     response = JSON.parse(response);
