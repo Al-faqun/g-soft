@@ -125,4 +125,71 @@ class CargoController extends PageController
         }
     }
     
+    /**
+     * Display list of cargo, that await manager's attention.
+     */
+    public function awaitingList()
+    {
+        //mappers that fetches objects from DB
+        $cargoMapper    = new CargoMapper($this->pdo);
+        $userMapper     = new UserMapper($this->pdo);
+        $passwordMapper = new PasswordMapper($this->pdo);
+        $view = new ListView( FileSystem::append([$this->root, 'templates']) );
+    
+        //manager of logins and registration
+        $loginMan  = new LoginManager($userMapper, $passwordMapper, $this->pdo);
+        //проверяем логин пользователя (если есть)
+        $authorized = $loginMan->isLogged();
+        //если залогинены - запоминаем имя для отображения на странице
+        if ($authorized === true) {
+            if ($loginMan->isClient()) {
+                //save info for template
+                $usergroup = 'client';
+            } elseif ($loginMan->isManager()) {
+                $usergroup = 'manager';
+            }
+            $usernameDisplayed = $loginMan->getLoggedName();
+        } else {
+            $usernameDisplayed = '';
+            $usergroup = '';
+        }
+    
+        //values for db search query, from previously executed requests
+        $limit = $this->getChecked('limit');
+        $offset = $this->getChecked('offset');
+        
+        if ($loginMan->isManager()){
+            //signalize info about caption etc to View
+            $authorized = 'managerAwaitingCargo';
+            //manager watches list page, he must see list of cargo under his supervise
+            $managerID = $loginMan->getLoggedID();
+            $cargo = $cargoMapper->getAwaitingCargo($limit, $offset);
+            //total number of how many entries were found in last DB query
+            $entriesCount = $cargoMapper->getEntriesCount();
+            //query parts of URL for pagination
+            $queries = Pager::getQueries($_GET, $entriesCount);
+        
+            $view->render([
+                'authorized' => $authorized,
+                'username'   => $usernameDisplayed,
+                'usergroup' => $usergroup,
+                'cargo' => $cargo,
+                'queries' => $queries,
+                'messages' => $this->getMessages()
+            ]);
+        
+        } else {
+            //NON-authed user must see only message
+            $message = 'Судя по всему, вы не залогинены на нашем сайте. '
+                . 'Только зарегистрированные пользователи с правами могут зайти на эту страницу!';
+        
+            $this->addMessage($message);
+            $view->render([
+                'authorized' => false,
+                'username'   => $usernameDisplayed,
+                'usergroup'  => '',
+                'messages' => $this->getMessages()
+            ]);
+        }
+    }
 }

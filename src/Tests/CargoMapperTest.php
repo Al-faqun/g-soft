@@ -169,5 +169,24 @@ class CargoMapperTest extends TestCase
         $this->assertFalse($result);
     }
     
+    public function testGetAwaiting1()
+    {
+        try {
+            $result = $this->mapper->getAwaitingCargo(); //be ware about whether this id is actually in db
+            $this->assertInternalType('array', $result);
+        } catch (DbException $e) {
+            echo $e->getPrevious()->getMessage();
+        }
+    }
+    
+    public function testGetAwaiting2()
+    {
+        try {
+            $result = $this->mapper->getAwaitingCargo(10, 0); //be ware about whether this id is actually in db
+            $this->assertInternalType('array', $result);
+        } catch (DbException $e) {
+            echo $e->getPrevious()->getMessage();
+        }
+    }
     
 }

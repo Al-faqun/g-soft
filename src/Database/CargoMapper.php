@@ -79,6 +79,7 @@ EOT;
      */
     function getForClient($clientID, $limit = 5, $offset = 0)
     {
+        //these are whitelisted values so they can be inserted directly (they cannot go as prep parameters)
         $sortBy = '`cargo`.`id`';
         $order  = 'ASC';
         try {
@@ -148,7 +149,8 @@ EOT;
      */
     function getForManager($managerID, $limit = 5, $offset = 0)
     {
-        $sortBy = 'container';
+        //these are whitelisted values so they can be inserted directly (they cannot go as prep parameters)
+        $sortBy = '`cargo`.`id`';
         $order  = 'ASC';
         try {
             $cargo = array();
@@ -167,7 +169,7 @@ EOT;
                 LEFT JOIN `clients` ON `cargo`.`client_id` = `clients`.`id`
                 LEFT JOIN `managers` ON `cargo`.`man_id` = `managers`.`id`
                 WHERE `managers`.`id` = :id
-                ORDER BY `$sortBy` $order
+                ORDER BY $sortBy $order
 EOT;
             if ($limit !== 'all') {
                 $sql .= ' LIMIT :limit OFFSET :offset';
@@ -209,6 +211,67 @@ EOT;
         return $cargo;
     }
     
+    function getAwaitingCargo($limit = 5, $offset = 0)
+    {
+        //these are whitelisted values so they can be inserted directly (they cannot go as prep parameters)
+        $sortBy = '`cargo`.`id`';
+        $order  = 'ASC';
+        try {
+            $cargo = array();
+        
+            $sql = <<<EOT
+                SELECT SQL_CALC_FOUND_ROWS
+                `cargo`.`id` as 'id',
+                `container`,
+                `client_id`,
+                `clients`.`company_name`  AS 'client_name',
+                `man_id`,
+                CONCAT(`managers`.`name`, ' ', `managers`.`surname`) AS 'manager_name',
+                `date_arrival`,
+                `status`
+                FROM `cargo`
+                LEFT JOIN `clients` ON `cargo`.`client_id` = `clients`.`id`
+                LEFT JOIN `managers` ON `cargo`.`man_id` = `managers`.`id`
+                WHERE `status` = 'awaiting' AND `man_id` IS NULL
+                ORDER BY $sortBy $order
+EOT;
+            if ($limit !== 'all') {
+                $sql .= ' LIMIT :limit OFFSET :offset';
+            }
+            
+            $stmt = $this->pdo->prepare($sql);
+            if ($limit !== 'all') {
+                $stmt->bindParam('limit', $limit, \PDO::PARAM_INT);
+                $stmt->bindParam('offset', $offset, \PDO::PARAM_INT);
+            }
+            //if executed successfully
+            if ( ($stmt->execute()) && ($stmt->rowCount() > 0) )  {
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                    //convert array of data to object
+                    $fetchedCargo = $this->convertToObject($row);
+                    //set optional fields
+                    $fetchedCargo->setClientName($row['client_name']);
+                    $fetchedCargo->setManagerName($row['manager_name']);
+                    //save into array of cargo
+                    $cargo[] = $fetchedCargo;
+                }
+            } else {
+                $cargo = false;
+            }
+            //save total number of found rows for later use
+            $this->lastCount = $this->foundRows();
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                //'Integrity constraint violation: foreign key...'
+                // - must not throw, because is predictable
+                //instead return false
+                $result = false;
+            } else {
+                throw new DbException('Ошибка при получении данных о грузах', 0, $e);
+            }
+        }
+        return $cargo;
+    }
     /**
      * @param $container
      * @param $clientID

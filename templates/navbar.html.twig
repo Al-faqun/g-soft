@@ -5,6 +5,9 @@
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
+				{% if usergroup is defined and usergroup == 'manager' %}
+					<span class="icon-bar"></span>
+				{% endif %}
 			</button>
 			<p class="navbar-brand">Личный кабинет</p>
 		</div>
@@ -12,6 +15,9 @@
 			<ul class="nav navbar-nav">
 				<li><a href="list.php">Главная</a></li>
 				<li><a href="registration.php">Регистрация</a></li>
+				{% if usergroup is defined and usergroup == 'manager' %}
+					<li><a href="awaitinglist.php">Новые грузы</a></li>
+				{% endif %}
 			</ul>
 			<!-- опциональная панель логина перенаправляет на login.php -->
 			{% if not authorized %}

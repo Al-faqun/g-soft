@@ -18,7 +18,7 @@ $errorHelper->registerFallbacks(Loader::getStatus());
 try { 
     $controller = new CargoController($root, Loader::getPDO());
     
-    //обработка get параметров
+    //if exist certain get parameter
     $controller->get('page', function ($key, $value, CargoController $c) {
         $validator = new SearchQueryValidator();
         //init
@@ -29,15 +29,17 @@ try {
         $c->addChecked('limit', $limit);
         $c->addChecked('offset', $offset);
     });
-    //обработка отсутствия get-параметров
+    
+    //if certain get parameter does not exist
     $controller->noGet('page', function ($key, $value, CargoController $c) {
         //default values
         $limit = 5; $offset = 0;
         $c->addChecked('limit', $limit);
         $c->addChecked('offset', $offset);
     });
-    //запуск нужной страницы
+    //process above lambdas
     $controller->start();
+    //request page: list of cargos
     $controller->list();
     
 } catch (\Throwable $e) {

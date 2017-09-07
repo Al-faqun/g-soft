@@ -1,5 +1,37 @@
+/**
+ * Make clientinfo form values defaolt.
+ */
+function cleanClientInfo() {
+    var title = document.getElementById('title');
+    var companyName = document.getElementById('company_name');
+    var inn = document.getElementById('inn');
+    var address = document.getElementById('address');
+    var email = document.getElementById('client_email');
+    var tel = document.getElementById('client_tel');
+    title.innerHTML = 'Название компании клиента: ';
+    companyName.innerHTML = 'Название компании клиента: ';
+    inn.innerHTML = 'Инн клиента: ';
+    address.innerHTML = 'Адрес клиента: ';
+    email.innerHTML = 'Электронная почта клиента: ';
+    tel.innerHTML = 'Телефон клиента: ';
+}
 
-
+/**
+ * Make managerinfo form values default.
+ */
+function cleanManagerInfo() {
+    //заполнить поля о менеджере
+    var title = document.getElementById('title');
+    var surname = document.getElementById('surname');
+    var name = document.getElementById('name');
+    var email = document.getElementById('man_email');
+    var tel = document.getElementById('man_tel');
+    title.innerHTML = 'Фамилия, Имя менеджера';
+    surname.innerHTML = 'Фамилия менеджера: ';
+    name.innerHTML = 'Имя менеджера: ';
+    email.innerHTML = 'Электронная почта менеджера: ';
+    tel.innerHTML = 'Телефон менеджера: ';
+}
 
 /**
  * Fetch info from server AND post it into page.
@@ -10,6 +42,8 @@ function getClientInfo(id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
+            //очистим данные формы от старых данных
+            cleanClientInfo();
             //ответ сервера
             var json = JSON.parse(this.responseText);
             if (json === false) {
@@ -61,12 +95,14 @@ function getManagerInfo(id) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
+            //очистим форму от старых данных
+            cleanManagerInfo();
             //ответ сервера
             var json = JSON.parse(this.responseText);
             if (json === false) {
                 var errorText = 'Извините, не получилось получить данные об этом пользователе.';
             } else {
-                //заполнить поля о клиенте
+                //заполнить поля о менеджере
                 var title = document.getElementById('title');
                 var surname = document.getElementById('surname');
                 var name = document.getElementById('name');

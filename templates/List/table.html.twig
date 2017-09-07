@@ -11,8 +11,11 @@
 					<th>Фамилия, Имя менеджера</th>
 					<th>Ожидаемая дата прибытия</th>
 					<th>Статус</th>
-					{% if usergroup == 'manager' %}
+					{% if usergroup == 'manager' and authorized == 'manager' %}
 						<th>Изменить данные</th>
+					{% endif %}
+					{% if (authorized == 'managerAwaitingCargo') %}
+						<th>Взять себе</th>
 					{% endif %}
 				</tr>
 				</thead>
@@ -29,11 +32,20 @@
 							</td>
 							<td id="cargo_{{ item.getId() }}_datearrival">{{ item.getDateArrival() }}</td>
 							<td id="cargo_{{ item.getId() }}_status">{{ item.getStatus() }}</td>
-							{% if (usergroup == 'manager') %}
+							{% if (usergroup == 'manager' and authorized == 'manager') %}
 								<td>
 									<button type="button" class="btn btn-secondary btn-manager pull-right"
 									        onclick="openEditDialog({{ item.getId() }})">
 										Редактировать
+									</button>
+								</td>
+							{% endif %}
+							{% if (authorized == 'managerAwaitingCargo') %}
+								<td>
+									
+									<button type="button" class="btn btn-secondary btn-manager pull-right"
+									onclick="makeExecutor({{ item.getId() }})">
+										Назначить себя исполнителем
 									</button>
 								</td>
 							{% endif %}

@@ -34,7 +34,7 @@ class Request
                 foreach ($this->key as $key) {
                     //if every key exists -> proceed, else - do nothing
                     if ( array_key_exists($key, $this->input) AND $previousResult === true) {
-                        $values[] = $this->input[$key];
+                        $values[$key] = $this->input[$key];
                         $previousResult = true;
                     } else {
                         $previousResult = false;

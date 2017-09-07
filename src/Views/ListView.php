@@ -42,6 +42,8 @@ class ListView extends CommonView
             $caption = 'Ваши грузы';
         } elseif ($authorized === 'manager') {
             $caption = 'Грузы ваших клиентов';
+        } elseif ($authorized === 'managerAwaitingCargo') {
+            $caption = 'Грузы, ожидающие менеджеров';
         } else {
             $caption = '';
         }
